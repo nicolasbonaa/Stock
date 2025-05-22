@@ -10,7 +10,7 @@ function CardList({ name, items, checked, onCheckChange }) {
       const updated = [...checked];
       updated[idx] = !updated[idx];
       onCheckChange(updated);
-    }
+    }s
   };
 
   return (
