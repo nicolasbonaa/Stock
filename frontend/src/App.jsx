@@ -1,20 +1,14 @@
-import { Routes, Route } from "react-router-dom";
-import React from 'react'
-import Header from './components/Header'
-import NumbersAssets from './pages/NumbersAssets';
-import ChecklistRooms from './pages/ChecklistRooms';
-import cardList from "./components/CardList";
+import { Route, Routes } from "react-router-dom";
+import Header from "./components/Header";
+import AppRoutes from "./routes";
+
 function App() {
   return (
     <div>
       <Header />
-      <Routes>
-      <Route path="/numbers-assets" element={<NumbersAssets />} />
-      <Route path="/checklist" element={<ChecklistRooms />} />
-      </Routes>
-      <cardList />
+      <AppRoutes />
     </div>
   );
 }
 
-export default App
+export default App;
