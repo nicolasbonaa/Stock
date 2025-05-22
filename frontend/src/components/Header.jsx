@@ -10,6 +10,7 @@ function Header() {
     { to: null, label: "Ativos" },
     { to: null, label: "Acessórios" },
     { to: "/checklist", label: "Checklist" },
+    { to: "/days-of-acident", label: "Dias sem Acidente" },
   ];
 
   return (
