@@ -103,20 +103,31 @@ function ChecklistRooms() {
   const handleGeneratePDF = () => {
     const doc = new jsPDF();
     let y = 20;
-    // Título
-    doc.setFontSize(20);
-    doc.text("Checklist", 10, y);
+    // Título centralizado e em negrito
+    doc.setFontSize(18);
+    doc.setFont(undefined, "bold");
+    doc.text("Faculdade CENSUPEG", doc.internal.pageSize.getWidth() / 2, y, {
+      align: "center",
+    });
+    y += 14;
+    doc.setFontSize(16);
+    doc.text("Checklist Salas", doc.internal.pageSize.getWidth() / 2, y, {
+      align: "center",
+    });
     y += 16;
     doc.setFontSize(12);
+    doc.setFont(undefined, "normal");
     roomsData.forEach((room, roomIdx) => {
       const checkedItems = room.items.filter(
         (_, itemIdx) => checkedState[roomIdx][itemIdx]
       );
       if (checkedItems.length > 0) {
+        doc.setFont(undefined, "bold");
         doc.text(room.name, 10, y);
+        doc.setFont(undefined, "normal");
         y += 8;
         checkedItems.forEach((item) => {
-          doc.text(`${item}`, 15, y);
+          doc.text(`✔ ${item}`, 15, y);
           y += 8;
         });
         y += 4;
