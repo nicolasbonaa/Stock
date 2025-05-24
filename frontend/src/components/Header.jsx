@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function Header() {
+function Header({ isRed = true }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const navLinks = [
     { to: "/numbers-assets", label: "Numeração de Ativos" },
@@ -14,7 +14,9 @@ function Header() {
   ];
 
   return (
-    <header className="bg-red-500 text-white">
+    <header
+      className={`${isRed ? "bg-red-500 text-white" : "bg-white text-red-500"}`}
+    >
       <div className="flex flex-row justify-between items-center h-24 p-8">
         <div className="flex flex-row items-center gap-4">
           <h1 className="text-3xl font-bold">Infraboys</h1>

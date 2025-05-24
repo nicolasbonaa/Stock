@@ -82,7 +82,6 @@ function ChecklistRooms() {
     },
   ];
 
-
   const [showModal, setShowModal] = useState(false);
   const [nomeConferente, setNomeConferente] = useState("");
   const [observacoes, setObservacoes] = useState("");
@@ -126,7 +125,9 @@ function ChecklistRooms() {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(28);
     doc.setTextColor(255, 255, 255);
-    doc.text("Checklist Salas FACULDADE CENSUPEG", pageWidth / 2, y, { align: "center" });
+    doc.text("Checklist Salas FACULDADE CENSUPEG", pageWidth / 2, y, {
+      align: "center",
+    });
     y += 36;
 
     // Para centralizar os textos dentro da moldura da sala, calculamos a largura do texto e posicionamos no centro da moldura
@@ -142,19 +143,17 @@ function ChecklistRooms() {
       const boxWidth = pageWidth - 80;
       const boxHeight = (itens.length + 1) * lineHeight + boxPadding * 2;
 
-
       // Moldura branca arredondada
       doc.setDrawColor(255);
       doc.setLineWidth(1);
       doc.setFillColor(255, 255, 255);
-      doc.roundedRect(boxLeft, boxTop, boxWidth, boxHeight, 8, 8, 'FD');
+      doc.roundedRect(boxLeft, boxTop, boxWidth, boxHeight, 8, 8, "FD");
 
       // Nome da sala - centralizado na moldura
       doc.setFont("helvetica", "bold");
       doc.setFontSize(16);
       doc.setTextColor(239, 68, 68); // vermelho escuro
-      const textRoomNameWidth = doc.getTextWidth(room.name);
-      const roomNameX = boxLeft + (boxWidth / 2);
+      const roomNameX = boxLeft + boxWidth / 2;
       let currentY = boxTop + boxPadding + lineHeight;
       doc.text(room.name, roomNameX, currentY, { align: "center" });
       currentY += lineHeight;
@@ -167,8 +166,7 @@ function ChecklistRooms() {
       itens.forEach((item, itemIdx) => {
         const marcado = checkedState[roomIdx][itemIdx];
         const textoItem = `${marcado ? "(x)" : "( )"} ${item}`;
-        const textoLargura = doc.getTextWidth(textoItem);
-        const posX = boxLeft + (boxWidth / 2);
+        const posX = boxLeft + boxWidth / 2;
         doc.text(textoItem, posX, currentY, { align: "center" });
         currentY += lineHeight;
       });
@@ -190,15 +188,21 @@ function ChecklistRooms() {
 
     // Quebrar texto das observações em múltiplas linhas se necessário
     const observacoesTexto = observacoes.trim() || "Sem observações.";
-    const observacoesLines = doc.splitTextToSize(observacoesTexto, boxWidth - boxPadding * 2 - 20);
+    const observacoesLines = doc.splitTextToSize(
+      observacoesTexto,
+      boxWidth - boxPadding * 2 - 20
+    );
 
-    const finalBoxHeight = finalLineHeight * 3 + observacoesLines.length * finalLineHeight + boxPadding * 2;
+    const finalBoxHeight =
+      finalLineHeight * 3 +
+      observacoesLines.length * finalLineHeight +
+      boxPadding * 2;
 
     // Moldura branca arredondada
     doc.setDrawColor(255);
     doc.setFillColor(255, 255, 255);
     doc.setLineWidth(1);
-    doc.roundedRect(boxLeft, finalBoxTop, boxWidth, finalBoxHeight, 8, 8, 'FD');
+    doc.roundedRect(boxLeft, finalBoxTop, boxWidth, finalBoxHeight, 8, 8, "FD");
 
     let textY = finalBoxTop + boxPadding + finalLineHeight;
 
@@ -206,7 +210,9 @@ function ChecklistRooms() {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(14);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Conferente: ${nomeConferente}`, pageWidth / 2, textY, { align: "center" });
+    doc.text(`Conferente: ${nomeConferente}`, pageWidth / 2, textY, {
+      align: "center",
+    });
     textY += finalLineHeight;
 
     // Data - centralizado
@@ -218,7 +224,7 @@ function ChecklistRooms() {
 
     // Observações - centralizado e com múltiplas linhas
     doc.setFont("helvetica", "italic");
-    observacoesLines.forEach(line => {
+    observacoesLines.forEach((line) => {
       doc.text(line, pageWidth / 2, textY, { align: "center" });
       textY += finalLineHeight;
     });
@@ -226,10 +232,12 @@ function ChecklistRooms() {
     doc.save("checklist.pdf");
   };
 
-
-
   return (
-    <div className="flex flex-col lg:flex lg:flex-row lg:flex-wrap justify-center items-start m-8 gap-6 relative min-h-screen">
+    <div
+      className={`flex flex-col lg:flex lg:flex-row lg:flex-wrap justify-center items-start m-8 gap-6 relative min-h-screen ${
+        hasAnyChecked ? "pb-20" : "pb-0"
+      }`}
+    >
       {roomsData.map((room, index) => (
         <CardList
           key={index}
@@ -250,26 +258,35 @@ function ChecklistRooms() {
             </button>
             {showModal && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-                <form onSubmit={(e) => {
-                  e.preventDefault();
-                  setShowModal(false);
-                  handleGeneratePDF();
-                }} className="bg-white rounded-lg p-8 shadow-lg w-full max-w-md">
-                  <h2 className="text-xl font-bold mb-4 text-red-600">Informações para o PDF</h2>
-                  <label className="block mb-2 font-semibold">Nome do conferente:</label>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setShowModal(false);
+                    handleGeneratePDF();
+                  }}
+                  className="bg-white rounded-lg p-8 shadow-lg w-full max-w-md"
+                >
+                  <h2 className="text-xl font-bold mb-4 text-red-600">
+                    Informações para o PDF
+                  </h2>
+                  <label className="block mb-2 font-semibold">
+                    Nome do conferente:
+                  </label>
                   <input
                     type="text"
                     className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
                     value={nomeConferente}
-                    onChange={e => setNomeConferente(e.target.value)}
+                    onChange={(e) => setNomeConferente(e.target.value)}
                     placeholder="Digite seu nome"
                     required
                   />
-                  <label className="block mb-2 font-semibold">Observações:</label>
+                  <label className="block mb-2 font-semibold">
+                    Observações:
+                  </label>
                   <textarea
                     className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
                     value={observacoes}
-                    onChange={e => setObservacoes(e.target.value)}
+                    onChange={(e) => setObservacoes(e.target.value)}
                     placeholder="Digite observações (opcional)"
                     rows={3}
                   />
@@ -293,7 +310,6 @@ function ChecklistRooms() {
           </div>
         </div>
       )}
-
     </div>
   );
 }
